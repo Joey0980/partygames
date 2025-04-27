@@ -1,5 +1,6 @@
 package com.devclub.partygames;
 
+import com.devclub.partygames.entity.ModEntities;
 import com.devclub.partygames.item.ModCreativeModeTabs;
 import com.devclub.partygames.item.ModItemProperties;
 import com.devclub.partygames.item.ModItems;
@@ -43,6 +44,7 @@ public class PartyGames {
         // Register our items
         ModItems.register(modEventBus);
         ModCreativeModeTabs.register(modEventBus);
+        ModEntities.register(modEventBus);
 
         // Register the item to a creative tab
         modEventBus.addListener(this::addCreative);
