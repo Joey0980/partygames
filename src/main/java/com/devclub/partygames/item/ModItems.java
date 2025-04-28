@@ -15,8 +15,8 @@ public class ModItems {
 
     public static final DeferredItem<Item> DART = ITEMS.registerItem(
         "dart",
-         DartItem::new,
-         new Item.Properties().stacksTo(16)
+        DartItem::new,
+        new Item.Properties().stacksTo(16)
     );
 
     public static void register(IEventBus bus) {
