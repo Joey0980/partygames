@@ -1,9 +1,6 @@
 package com.devclub.partygames.block.custom;
 
-import net.minecraft.world.level.block.Block;
-
-
-import java.util.List;
+import com.mojang.serialization.MapCodec;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.network.chat.Component;
@@ -14,33 +11,37 @@ import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.decoration.ArmorStand;
 import net.minecraft.world.entity.projectile.AbstractArrow;
 import net.minecraft.world.entity.projectile.Projectile;
+import net.minecraft.world.item.context.BlockPlaceContext;
+import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.HorizontalDirectionalBlock;
+import net.minecraft.world.level.block.state.BlockBehaviour.Properties;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.Vec3;
-
-import com.mojang.serialization.MapCodec;
-import net.minecraft.world.item.context.BlockPlaceContext;
-import net.minecraft.world.level.BlockGetter;
-import net.minecraft.world.level.block.HorizontalDirectionalBlock;
-import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.List;
+
 public class DartBoardBlock extends HorizontalDirectionalBlock {
-    private static final int DISPLAY_TICKS = 20;
     public static final MapCodec<DartBoardBlock> CODEC = simpleCodec(DartBoardBlock::new);
-    private static final VoxelShape SHAPE = Block.box(7, 0, -5, 9, 26, 21);
+    private static final int DISPLAY_TICKS = 20;
+
+    // 1px-thick faces on each side
+    private static final VoxelShape NORTH_SHAPE = Block.box(0, 0, 0, 16, 16, 1);
+    private static final VoxelShape SOUTH_SHAPE = Block.box(0, 0, 15, 16, 16, 16);
+    private static final VoxelShape WEST_SHAPE  = Block.box(0, 0, 0, 1, 16, 16);
+    private static final VoxelShape EAST_SHAPE  = Block.box(15, 0, 0, 16, 16, 16);
 
     public DartBoardBlock(Properties properties) {
         super(properties);
-    }
-
-    @Override
-    protected VoxelShape getShape(BlockState state, BlockGetter level, BlockPos pos, CollisionContext context) {
-        return SHAPE;
+        // default facing so getShape never sees null
+        registerDefaultState(defaultBlockState().setValue(FACING, Direction.SOUTH));
     }
 
     @Override
@@ -50,8 +51,8 @@ public class DartBoardBlock extends HorizontalDirectionalBlock {
 
     @Nullable
     @Override
-    public BlockState getStateForPlacement(BlockPlaceContext context) {
-        return this.defaultBlockState().setValue(FACING, context.getHorizontalDirection().getOpposite());
+    public BlockState getStateForPlacement(BlockPlaceContext ctx) {
+        return defaultBlockState().setValue(FACING, ctx.getHorizontalDirection().getOpposite());
     }
 
     @Override
@@ -59,50 +60,51 @@ public class DartBoardBlock extends HorizontalDirectionalBlock {
         builder.add(FACING);
     }
 
-    // handle being hit by arrow
     @Override
-    protected void onProjectileHit(Level level, BlockState state, BlockHitResult hit, Projectile projectile) {
-        if (!level.isClientSide && projectile instanceof AbstractArrow) {
+    public VoxelShape getShape(BlockState state, BlockGetter world, BlockPos pos, CollisionContext ctx) {
+        return switch (state.getValue(FACING)) {
+            case NORTH -> SOUTH_SHAPE;
+            case SOUTH -> NORTH_SHAPE;
+            case WEST  -> EAST_SHAPE;
+            case EAST  -> WEST_SHAPE;
+            default    -> NORTH_SHAPE;   // covers any other Direction
+        };
+    }
+
+    public void onProjectileHit(BlockState state, Level world, BlockHitResult hit, Projectile projectile) {
+        if (!world.isClientSide && projectile instanceof AbstractArrow) {
             int score = computeScore(hit, hit.getLocation());
-            spawnFloatingNumber((ServerLevel) level, hit.getBlockPos(), hit.getLocation(), score);
-            ((ServerLevel) level).scheduleTick(hit.getBlockPos(), this, DISPLAY_TICKS);
+            spawnFloatingNumber((ServerLevel) world, hit.getBlockPos(), hit.getLocation(), score);
+            world.scheduleTick(hit.getBlockPos(), this, DISPLAY_TICKS);
         }
     }
 
-    // convert redstone strength into getting score
     private static int computeScore(BlockHitResult hit, Vec3 loc) {
         Direction dir = hit.getDirection();
         double dx = Math.abs(Mth.frac(loc.x) - 0.5);
         double dy = Math.abs(Mth.frac(loc.y) - 0.5);
         double dz = Math.abs(Mth.frac(loc.z) - 0.5);
 
-        Direction.Axis axis = dir.getAxis();
-        double d;
-        if (axis == Direction.Axis.Y) {
-            d = Math.max(dx, dz);
-        } else if (axis == Direction.Axis.Z) {
-            d = Math.max(dx, dy);
-        } else {
-            d = Math.max(dy, dz);
-        }
+        double d = switch (dir.getAxis()) {
+            case Y -> Math.max(dx, dz);
+            case Z -> Math.max(dx, dy);
+            default -> Math.max(dy, dz);
+        };
 
         double clamped = Mth.clamp((0.5 - d) / 0.5, 0.0, 1.0);
         return Math.max(1, Mth.ceil(15.0 * clamped));
     }
 
-    // create invisible armor stand
     private void spawnFloatingNumber(ServerLevel level, BlockPos pos, Vec3 loc, int score) {
-        ArmorStand stand = (ArmorStand) EntityType.ARMOR_STAND.create(level);
+        ArmorStand stand = EntityType.ARMOR_STAND.create(level);
         if (stand == null) return;
 
-        // spawn stand at projectile point
-        stand.setPos(loc.x, loc.y-1, loc.z);
+        stand.setPos(loc.x, loc.y - 1, loc.z);
         stand.setInvisible(true);
         stand.setNoGravity(true);
-        //stand.setSmall(true); // PRIVATE?
+        //stand.setSmall(true);
         stand.setNoBasePlate(true);
 
-        // display score
         stand.setCustomName(Component.literal(Integer.toString(score)));
         stand.setCustomNameVisible(true);
         stand.getPersistentData().putBoolean("DartScore", true);
@@ -110,15 +112,13 @@ public class DartBoardBlock extends HorizontalDirectionalBlock {
         level.addFreshEntity(stand);
     }
 
-    // clean up old (also tagged aboe) armor stands
     @Override
-    public void tick(BlockState state, ServerLevel level, BlockPos pos, RandomSource rand) {
+    public void tick(BlockState state, ServerLevel level, BlockPos pos, RandomSource random) {
+        // use AABB(BlockPos) + inflate, so BlockPos is allowed
         List<ArmorStand> stands = level.getEntitiesOfClass(
                 ArmorStand.class,
-                new AABB(pos).inflate(1)
+                new AABB(pos).inflate(1.0D)
         );
-
-        // kill each armor stand with DartScore tag
         for (ArmorStand s : stands) {
             if (s.getPersistentData().getBoolean("DartScore")) {
                 s.kill();
