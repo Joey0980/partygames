@@ -1,8 +1,12 @@
 package com.devclub.partygames;
 
 import com.devclub.partygames.block.ModBlocks;
+import com.devclub.partygames.entity.ModEntities;
+import com.devclub.partygames.entity.client.ThrownDartRenderer;
 import com.devclub.partygames.item.ModCreativeModeTabs;
+import com.devclub.partygames.item.ModItemProperties;
 import com.devclub.partygames.item.ModItems;
+import net.minecraft.client.renderer.entity.EntityRenderers;
 import org.slf4j.Logger;
 
 import com.mojang.logging.LogUtils;
@@ -60,7 +64,7 @@ public class PartyGames
         // Register our items
         ModItems.register(modEventBus);
         ModCreativeModeTabs.register(modEventBus);
-        //ModEntities.register(modEventBus);
+        ModEntities.register(modEventBus);
         ModBlocks.register(modEventBus);
 
         // Register ourselves for server and other game events we are interested in.
@@ -110,9 +114,9 @@ public class PartyGames
         @SubscribeEvent
         public static void onClientSetup(FMLClientSetupEvent event)
         {
-            // Some client setup code
-            LOGGER.info("HELLO FROM CLIENT SETUP");
-            LOGGER.info("MINECRAFT NAME >> {}", Minecraft.getInstance().getUser().getName());
+            ModItemProperties.addCustomItemProperties();
+
+            EntityRenderers.register(ModEntities.THROWN_DART.get(), ThrownDartRenderer::new);
         }
     }
 }
