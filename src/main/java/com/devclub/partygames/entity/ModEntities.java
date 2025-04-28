@@ -17,7 +17,7 @@ public class ModEntities {
         ENTITY_TYPES.register(
             "thrown_dart",
             () -> EntityType.Builder.<ThrownDartEntity>of(ThrownDartEntity::new, MobCategory.MISC)
-                .sized(1.0f, 1.0f)
+                .sized(0.25f, 0.25f)
                 .build("thrown_dart")
         );
 

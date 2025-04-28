@@ -5,15 +5,15 @@ import com.devclub.partygames.item.ModItems;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.projectile.AbstractArrow;
+import net.minecraft.world.entity.projectile.Arrow;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.BlockHitResult;
+import net.minecraft.world.phys.EntityHitResult;
 import net.minecraft.world.phys.Vec2;
+import net.minecraft.client.renderer.entity.ArrowRenderer;
 
 public class ThrownDartEntity extends AbstractArrow {
-    private float rotation;
-    public Vec2 groundedOffset;
-
     public ThrownDartEntity(EntityType<? extends AbstractArrow> entityType, Level level) {
         super(entityType, level);
     }
@@ -30,5 +30,10 @@ public class ThrownDartEntity extends AbstractArrow {
     @Override
     protected void onHitBlock(BlockHitResult result) {
         super.onHitBlock(result);
+    }
+
+    @Override
+    protected void onHitEntity(EntityHitResult result) {
+        return;
     }
 }

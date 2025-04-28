@@ -2,7 +2,7 @@
 	"credit": "Made with Blockbench",
 	"texture_size": [64, 64],
 	"textures": {
-		"1": "partygames:items/dart_item"
+		"0": "partygames:items/dart_item"
 	},
 	"elements": [
 		{

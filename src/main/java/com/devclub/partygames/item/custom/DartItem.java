@@ -60,7 +60,7 @@ public class DartItem extends Item {
 
                 level.addFreshEntity(dartEntity);
                 level.playSound(null, player.getX(), player.getY(), player.getZ(),
-                    SoundEvents.TRIDENT_THROW, SoundSource.PLAYERS, 1.0F, 1.0F);
+                    SoundEvents.ARROW_SHOOT, SoundSource.PLAYERS, 1.0F, 1.0F);
 
                 if (!player.getAbilities().instabuild) {
                     stack.shrink(1); // Consume the dart
