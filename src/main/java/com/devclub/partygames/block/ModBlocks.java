@@ -15,7 +15,8 @@ import net.neoforged.neoforge.registries.DeferredRegister;
 import java.util.function.Supplier;
 
 public class ModBlocks {
-    public static final DeferredRegister.Blocks BLOCKS = DeferredRegister.createBlocks(PartyGames.MOD_ID);
+    public static final DeferredRegister.Blocks BLOCKS =
+            DeferredRegister.createBlocks(PartyGames.MOD_ID);
 
     public static final DeferredBlock<Block> DART_BOARD_BLOCK = registerBlock("dart_board_block",
             () -> new DartBoardBlock(BlockBehaviour.Properties.of().noOcclusion()));

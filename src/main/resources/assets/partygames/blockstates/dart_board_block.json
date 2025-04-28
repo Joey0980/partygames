@@ -1,0 +1,7 @@
+{
+  "variants": {
+    "": {
+      "model": "partygames:block/dart_board_block"
+    }
+  }
+}

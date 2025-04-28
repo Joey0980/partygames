@@ -20,43 +20,11 @@ import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.Vec3;
 
-import com.mojang.serialization.MapCodec;
-import net.minecraft.world.item.context.BlockPlaceContext;
-import net.minecraft.world.level.BlockGetter;
-import net.minecraft.world.level.block.HorizontalDirectionalBlock;
-import net.minecraft.world.level.block.state.StateDefinition;
-import net.minecraft.world.phys.shapes.CollisionContext;
-import net.minecraft.world.phys.shapes.VoxelShape;
-import org.jetbrains.annotations.Nullable;
-
-public class DartBoardBlock extends HorizontalDirectionalBlock {
+public class DartBoardBlock extends Block {
     private static final int DISPLAY_TICKS = 20;
-    public static final MapCodec<DartBoardBlock> CODEC = simpleCodec(DartBoardBlock::new);
-    private static final VoxelShape SHAPE = Block.box(7, 0, -5, 9, 26, 21);
 
     public DartBoardBlock(Properties properties) {
         super(properties);
-    }
-
-    @Override
-    protected VoxelShape getShape(BlockState state, BlockGetter level, BlockPos pos, CollisionContext context) {
-        return SHAPE;
-    }
-
-    @Override
-    protected MapCodec<? extends HorizontalDirectionalBlock> codec() {
-        return CODEC;
-    }
-
-    @Nullable
-    @Override
-    public BlockState getStateForPlacement(BlockPlaceContext context) {
-        return this.defaultBlockState().setValue(FACING, context.getHorizontalDirection().getOpposite());
-    }
-
-    @Override
-    protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
-        builder.add(FACING);
     }
 
     // handle being hit by arrow
@@ -69,25 +37,28 @@ public class DartBoardBlock extends HorizontalDirectionalBlock {
         }
     }
 
-    // convert redstone strength into getting score
+    // convert hit location into a 0–15 score
     private static int computeScore(BlockHitResult hit, Vec3 loc) {
         Direction dir = hit.getDirection();
         double dx = Math.abs(Mth.frac(loc.x) - 0.5);
         double dy = Math.abs(Mth.frac(loc.y) - 0.5);
         double dz = Math.abs(Mth.frac(loc.z) - 0.5);
 
-        Direction.Axis axis = dir.getAxis();
         double d;
-        if (axis == Direction.Axis.Y) {
-            d = Math.max(dx, dz);
-        } else if (axis == Direction.Axis.Z) {
-            d = Math.max(dx, dy);
-        } else {
-            d = Math.max(dy, dz);
+        switch (dir.getAxis()) {
+            case Y -> d = Math.max(dx, dz);
+            case Z -> d = Math.max(dx, dy);
+            default /*X*/ -> d = Math.max(dy, dz);
         }
 
-        double clamped = Mth.clamp((0.5 - d) / 0.5, 0.0, 1.0);
-        return Math.max(1, Mth.ceil(15.0 * clamped));
+        // the board graphic has a 2-pixel border on all sides of a 16×16 grid → inner radius = 6px/16
+        double boardRadius = 6.0 / 16.0;
+        if (d > boardRadius) {
+            return 0;  // you hit the wood
+        }
+
+        double norm = (boardRadius - d) / boardRadius;
+        return Mth.ceil(15.0 * norm);
     }
 
     // create invisible armor stand
@@ -96,7 +67,7 @@ public class DartBoardBlock extends HorizontalDirectionalBlock {
         if (stand == null) return;
 
         // spawn stand at projectile point
-        stand.setPos(loc.x, loc.y-1, loc.z);
+        stand.setPos(loc.x, loc.y-1.5, loc.z);
         stand.setInvisible(true);
         stand.setNoGravity(true);
         //stand.setSmall(true); // PRIVATE?
