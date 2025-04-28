@@ -1,16 +1,7 @@
 {
-	"variants": {
-		"facing=north": {
-			"model": "partygames:block/dart_board_block"
-		},
-		"facing=south": {
-			"model": "partygames:block/dart_board_block"
-		},
-		"facing=east": {
-			"model": "partygames:block/dart_board_block"
-		},
-		"facing=west": {
-			"model": "partygames:block/dart_board_block"
-		}
-	}
+  "variants": {
+    "": {
+      "model": "partygames:block/dart_board_block"
+    }
+  }
 }
