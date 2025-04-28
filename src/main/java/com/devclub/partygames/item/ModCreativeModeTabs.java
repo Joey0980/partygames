@@ -1,6 +1,7 @@
 package com.devclub.partygames.item;
 
 import com.devclub.partygames.PartyGames;
+import com.devclub.partygames.block.ModBlocks;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.CreativeModeTab;
@@ -18,6 +19,7 @@ public class ModCreativeModeTabs {
         .icon(() -> new ItemStack(ModItems.DART.get()))
         .displayItems((params, output) -> {
             output.accept(ModItems.DART.get());
+            output.accept(ModBlocks.DART_BOARD_BLOCK);
         })
         .build()
     );

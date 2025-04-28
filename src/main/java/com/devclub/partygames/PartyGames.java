@@ -1,5 +1,6 @@
 package com.devclub.partygames;
 
+import com.devclub.partygames.block.ModBlocks;
 import com.devclub.partygames.item.ModCreativeModeTabs;
 import com.devclub.partygames.item.ModItems;
 import org.slf4j.Logger;
@@ -60,6 +61,7 @@ public class PartyGames
         ModItems.register(modEventBus);
         ModCreativeModeTabs.register(modEventBus);
         //ModEntities.register(modEventBus);
+        ModBlocks.register(modEventBus);
 
         // Register ourselves for server and other game events we are interested in.
         // Note that this is necessary if and only if we want *this* class (ExampleMod) to respond directly to events.
