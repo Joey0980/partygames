@@ -64,7 +64,7 @@ public class DartBoardBlock extends Block {
         if (stand == null) return;
 
         // spawn stand at projectile point
-        stand.setPos(loc.x, loc.y, loc.z);
+        stand.setPos(loc.x, loc.y-1, loc.z);
         stand.setInvisible(true);
         stand.setNoGravity(true);
         //stand.setSmall(true); // PRIVATE?
