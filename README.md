@@ -35,7 +35,12 @@ Built for the [Sprint.dev Minecraft Hackathon](https://www.sprint.dev/hackathons
 ---
 
 ## Crafting Recipes
-TBA
+
+- **Dart**  
+  ![Dart Recipe](screenshots/dart_crafting.webp)
+
+- **Dart Board**  
+  ![Dart Board Recipe](screenshots/board_crafting.webp)
 
 ---
 
@@ -63,13 +68,6 @@ TBA
 
 ---
 
-## Developer Notes
-
-- **Mappings**: Uses the official Mojang mappings. See [Mojang.md](https://github.com/NeoForged/NeoForm/blob/main/Mojang.md)  
-- **NeoForge Docs**: https://docs.neoforged.net/  
-- **Discord**: https://discord.neoforged.net/  
-
----
 
 ## Credits
 
