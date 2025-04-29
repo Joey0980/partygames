@@ -6,7 +6,7 @@ A simple, turn-based darts mini-game for Minecraft 1.21.1 using NeoForge. Throw 
 
 ## Overview
 
-- **DartItem**: A throwable dart (mix of trident+arrow)  
+- **Dart**: A throwable dart (mix of trident+arrow)  
 - **DartBoardBlock**: Custom target block that calculates a 0–15 score based on hit position  
 - **Scoreboard**: `/dart challenge <rounds> [player]` to start, `/dart stop` to end  
 - **Solo or PvP**: Play by yourself or challenge a friend  
