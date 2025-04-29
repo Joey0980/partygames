@@ -1,25 +1,76 @@
+# PartyGames Minecraft Dart Mod
 
-Installation information
-=======
+A simple, turn-based darts mini-game for Minecraft 1.21.1 using NeoForge. You can now play darts by yourself or with friends in Minecraft! 
 
-This template repository can be directly cloned to get you started with a new
-mod. Simply create a new repository cloned from this one, by following the
-instructions provided by [GitHub](https://docs.github.com/en/repositories/creating-and-managing-repositories/creating-a-repository-from-a-template).
+Built for the [Sprint.dev Minecraft Hackathon](https://www.sprint.dev/hackathons/minecrafthack).
 
-Once you have your clone, simply open the repository in the IDE of your choice. The usual recommendation for an IDE is either IntelliJ IDEA or Eclipse.
+---
 
-If at any point you are missing libraries in your IDE, or you've run into problems you can
-run `gradlew --refresh-dependencies` to refresh the local cache. `gradlew clean` to reset everything 
-{this does not affect your code} and then start the process again.
+## Overview
 
-Mapping Names:
-============
-By default, the MDK is configured to use the official mapping names from Mojang for methods and fields 
-in the Minecraft codebase. These names are covered by a specific license. All modders should be aware of this
-license. For the latest license text, refer to the mapping file itself, or the reference copy here:
-https://github.com/NeoForged/NeoForm/blob/main/Mojang.md
+- **Dart**: A throwable dart (mix of trident+arrow)  
+- **Dart Board Block**: Custom target block that calculates a 0–15 score based on hit position  
+- **Scoreboard**: `/dart challenge <rounds> [player]` to start, `/dart stop` to end  
+- **Solo or PvP**: Play by yourself or challenge a friend  
 
-Additional Resources: 
-==========
-Community Documentation: https://docs.neoforged.net/  
-NeoForged Discord: https://discord.neoforged.net/
+---
+
+## Installation
+
+1. **Clone from this template**  
+   ```bash
+   git clone https://github.com/your-org/partygames-minecraft-dart.git
+   cd partygames-minecraft-dart
+   ```
+2. **Open in IDE**  
+   IntelliJ IDEA or Eclipse recommended.  
+3. **Refresh & build**  
+   ```bash
+   ./gradlew --refresh-dependencies
+   ./gradlew clean build
+   ```
+4. **Run**  
+   Launch your development environment or drop the generated JAR into your mods folder.
+
+---
+
+## Crafting Recipes
+
+- **Dart**  
+  ![Dart Recipe](screenshots/dart_crafting.webp)
+
+- **Dart Board**  
+  ![Dart Board Recipe](screenshots/board_crafting.webp)
+
+---
+
+## Usage
+
+1. **Place** a Dart Board block in the world.  
+2. **Get** a Dart (e.g. from `/give @p partygames:dart`).  
+3. **Start** the game:  
+   - Solo:  
+     ```
+     /dart challenge <rounds>
+     ```  
+   - PvP:  
+     ```
+     /dart challenge <rounds> <otherPlayer>
+     ```  
+   This resets both scores to 0 and displays “Dart Score” in the sidebar.  
+4. **Throw** darts by charging the Dart (hold right-click) and releasing at the board.  
+5. **Score** updates automatically after each hit.  
+6. **Stop** anytime:  
+   ```
+   /dart stop
+   ```  
+   This removes the scoreboard and ends the game.
+
+---
+
+
+## Credits
+
+- **Joey0980 (Joey)** – Setup environment; implemented Dart and ThrownDartEntity  
+- **grcodeman (Cody)** – Created Dart Board block; wired scoring & commands
+- **calvinb552 (Calvin)** – Designed and modeled block/dart assets & textures  
