@@ -40,7 +40,7 @@ public class DartItem extends Item {
 
     @Override
     public InteractionResultHolder<ItemStack> use(Level level, Player player, InteractionHand hand) {
-        player.startUsingItem(hand); // <- Instead of throwing instantly, start "charging"
+        player.startUsingItem(hand); // Charge the item
         return InteractionResultHolder.consume(player.getItemInHand(hand));
     }
 
@@ -56,11 +56,11 @@ public class DartItem extends Item {
 
                 float velocity = getPowerForTime(useDuration);
 
-                // New: Calculate deviation from perfect charge (20 ticks)
+                // Calculate deviation from perfect charge (20 ticks)
                 float idealCharge = 20.0F; // perfect at 20 ticks
                 float deviation = Math.abs(useDuration - idealCharge) / idealCharge;
 
-                // New: Spread increases if charge is wrong
+                // Spread increases if charge is wrong
                 float spread = deviation * 5.0F; // up to 5 degrees off at worst
 
                 dartEntity.shootFromRotation(player, player.getXRot(), player.getYRot(), 0.0F, velocity * 2.5F, spread);
