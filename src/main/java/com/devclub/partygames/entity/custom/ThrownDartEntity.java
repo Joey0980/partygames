@@ -34,6 +34,7 @@ public class ThrownDartEntity extends AbstractArrow {
 
     @Override
     protected void onHitEntity(EntityHitResult result) {
-        return;
+        return; // dart won't deal damage to entities
+        //super.onHitEntity(result);
     }
 }

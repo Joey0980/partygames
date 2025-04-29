@@ -33,7 +33,9 @@ public class ThrownDartRenderer extends EntityRenderer<ThrownDartEntity> {
         poseStack.mulPose(Axis.ZP.rotationDegrees(pitch));
 
         // Move pivot forward so the tip is at the center of the hitbox
-        poseStack.translate(0d, 0d, 0d);
+        poseStack.translate(0d, -0.5d, 0d);
+        poseStack.scale(0.5F, 0.5F, 0.5F);
+
 
         // Apply shake animation if dart is embedded
         float shakeTime = entity.shakeTime - partialTicks;

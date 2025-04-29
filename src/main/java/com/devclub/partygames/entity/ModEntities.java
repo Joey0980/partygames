@@ -17,10 +17,9 @@ public class ModEntities {
         ENTITY_TYPES.register(
             "thrown_dart",
             () -> EntityType.Builder.<ThrownDartEntity>of(ThrownDartEntity::new, MobCategory.MISC)
-                .sized(0.25f, 0.25f)
+                .sized(0.1f, 0.1f)
                 .build("thrown_dart")
         );
-
 
     public static void register(IEventBus bus) {
         ENTITY_TYPES.register(bus);

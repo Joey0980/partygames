@@ -29,8 +29,9 @@ public class DartItem extends Item {
 
     @Override
     public UseAnim getUseAnimation(ItemStack stack) {
-        return UseAnim.SPEAR;
+        return UseAnim.BOW;
     }
+
 
     @Override
     public int getUseDuration(ItemStack stack, LivingEntity entity) {
@@ -48,15 +49,21 @@ public class DartItem extends Item {
         if (livingEntity instanceof Player player) {
             int useDuration = this.getUseDuration(stack, player) - timeLeft;
 
-            // Optionally: only allow shooting after charging a little bit
             if (useDuration < 10) return; // Must charge at least 10 ticks (half a second)
 
             if (!level.isClientSide) {
                 ThrownDartEntity dartEntity = new ThrownDartEntity(player, level);
 
-                // Set power based on how long you charged (optional: more charge = faster dart)
                 float velocity = getPowerForTime(useDuration);
-                dartEntity.shootFromRotation(player, player.getXRot(), player.getYRot(), 0.0F, velocity * 2.5F, 1.0F);
+
+                // New: Calculate deviation from perfect charge (20 ticks)
+                float idealCharge = 20.0F; // perfect at 20 ticks
+                float deviation = Math.abs(useDuration - idealCharge) / idealCharge;
+
+                // New: Spread increases if charge is wrong
+                float spread = deviation * 5.0F; // up to 5 degrees off at worst
+
+                dartEntity.shootFromRotation(player, player.getXRot(), player.getYRot(), 0.0F, velocity * 2.5F, spread);
 
                 level.addFreshEntity(dartEntity);
                 level.playSound(null, player.getX(), player.getY(), player.getZ(),
@@ -70,6 +77,7 @@ public class DartItem extends Item {
             player.awardStat(net.minecraft.stats.Stats.ITEM_USED.get(this));
         }
     }
+
 
     private static float getPowerForTime(int charge) {
         float f = (float) charge / 20.0F;
