@@ -9,7 +9,7 @@ Built for the [Sprint.dev Minecraft Hackathon](https://www.sprint.dev/hackathons
 ## Overview
 
 - **Dart**: A throwable dart (mix of trident+arrow)  
-- **DartBoardBlock**: Custom target block that calculates a 0–15 score based on hit position  
+- **Dart Board Block**: Custom target block that calculates a 0–15 score based on hit position  
 - **Scoreboard**: `/dart challenge <rounds> [player]` to start, `/dart stop` to end  
 - **Solo or PvP**: Play by yourself or challenge a friend  
 
@@ -34,10 +34,15 @@ Built for the [Sprint.dev Minecraft Hackathon](https://www.sprint.dev/hackathons
 
 ---
 
+## Crafting Recipes
+TBA
+
+---
+
 ## Usage
 
-1. **Place** a DartBoard block in the world.  
-2. **Get** a DartItem (e.g. from `/give @p partygames:dart`).  
+1. **Place** a Dart Board block in the world.  
+2. **Get** a Dart (e.g. from `/give @p partygames:dart`).  
 3. **Start** the game:  
    - Solo:  
      ```
@@ -48,7 +53,7 @@ Built for the [Sprint.dev Minecraft Hackathon](https://www.sprint.dev/hackathons
      /dart challenge <rounds> <otherPlayer>
      ```  
    This resets both scores to 0 and displays “Dart Score” in the sidebar.  
-4. **Throw** darts by charging the DartItem (hold right-click) and releasing at the board.  
+4. **Throw** darts by charging the Dart (hold right-click) and releasing at the board.  
 5. **Score** updates automatically after each hit.  
 6. **Stop** anytime:  
    ```
@@ -68,6 +73,6 @@ Built for the [Sprint.dev Minecraft Hackathon](https://www.sprint.dev/hackathons
 
 ## Credits
 
-- **Joey0980 (Joey)** – Setup environment; implemented DartItem and ThrownDartEntity  
-- **grcodeman (Cody)** – Created DartBoardBlock; wired scoring & commands  
+- **Joey0980 (Joey)** – Setup environment; implemented Dart and ThrownDartEntity  
+- **grcodeman (Cody)** – Created Dart Board block; wired scoring & commands
 - **calvinb552 (Calvin)** – Designed and modeled block/dart assets & textures  
