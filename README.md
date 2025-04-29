@@ -1,6 +1,8 @@
 # PartyGames Minecraft Dart Mod
 
-A simple, turn-based darts mini-game for Minecraft 1.21.1 using NeoForge. Throw custom darts at a DartBoard block, track your score on the in-game sidebar, and challenge friends or play solo! Built for the [Sprint.dev Minecraft Hackathon](https://www.sprint.dev/hackathons/minecrafthack).
+A simple, turn-based darts mini-game for Minecraft 1.21.1 using NeoForge. You can now play darts by yourself or with friends in Minecraft! 
+
+Built for the [Sprint.dev Minecraft Hackathon](https://www.sprint.dev/hackathons/minecrafthack).
 
 ---
 
